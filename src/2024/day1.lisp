@@ -1,7 +1,7 @@
-(defpackage cl-aoc.day1
+(defpackage cl-aoc/2024/day1
   (:use :cl)
   (:export #:1a #:1b))
-(in-package :cl-aoc.day1)
+(in-package :cl-aoc/2024/day1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 1a
