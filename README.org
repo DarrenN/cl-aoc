@@ -6,11 +6,19 @@
 - Each day is it's own package: =CL-AOC/<YEAR>/<DAY>=
 - Tests? Maybe, but don't count on 'em
 
+Example (in your sly/slime repl):
+
+#+begin_src lisp
+  (in-package :cl-aoc/2024/day1)
+  (1a)
+#+end_src
+
 ** Installation
+
+Clone repo to your =local-projects= or equivalent, then use ASDF or Quicklisp.
 
 #+begin_src lisp
   (ql:quickload :cl-aoc)
-  (in-package :cl-aoc/2024/day1)
 #+end_src
 
 ** Author
