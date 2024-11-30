@@ -14,7 +14,8 @@
                "uiop")
   :components ((:module "src"
                 :components
-                ((:file "main"))))
+                ((:file "main")
+                 (:file "day1"))))
   :description "Advent of Code in Common Lisp (SBCL)"
   :in-order-to ((test-op (test-op "cl-aoc/tests"))))
 
