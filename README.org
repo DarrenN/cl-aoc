@@ -1,8 +1,17 @@
-* Cl-Aoc  - Advent of Code in Common Lisp (SBCL)
+* Advent of Code in Common Lisp (SBCL)
 
 ** Usage
 
+- Years namespaced by folders: =src/<year>/<day>.lisp=
+- Each day is it's own package: =CL-AOC/<YEAR>/<DAY>=
+- Tests? Maybe, but don't count on 'em
+
 ** Installation
+
+#+begin_src lisp
+  (ql:quickload :cl-aoc)
+  (in-package :cl-aoc/2024/day1)
+#+end_src
 
 ** Author
 
