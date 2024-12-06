@@ -1,6 +1,7 @@
 (defpackage cl-aoc/2024/day3
   (:use :cl)
   (:import-from :str)
+  (:import-from :trivia)
   (:import-from :serapeum #:dict)
   (:import-from :parse-number #:parse-number)
   (:export #:part1 #:part2))
@@ -15,8 +16,107 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; part1
 
+(defun match-mul (c)
+  (or (eq #\m c)
+      (eq #\u c)
+      (eq #\l c)
+      (eq #\( c)))
+
+(defun match-num (c)
+  (or (eq #\0 c)
+      (eq #\1 c)
+      (eq #\2 c)
+      (eq #\3 c)
+      (eq #\4 c)
+      (eq #\5 c)
+      (eq #\6 c)
+      (eq #\7 c)
+      (eq #\8 c)
+      (eq #\9 c)))
+
+(defun clear-state (h)
+  (loop :for k :in '(:state :param1 :param2)
+        :do (setf (gethash k h) '()))
+  h)
+
+(defun handle-mul (h c)
+  (let* ((s (gethash :state h))
+         (r (append s `(,c))))
+    (cond
+      ((and (equal s '(#\m #\u #\l))
+            (equal c #\())
+       (setf (gethash :state h) '(*)))
+      ((or (equal r '(#\m #\u #\l))
+           (equal r '(#\m #\u))
+           (equal r '(#\m)))
+       (setf (gethash :state h) r))
+      (t (clear-state h)))))
+
+(defun handle-num (h c)
+  (let ((s (gethash :state h))
+        (p1 (gethash :param1 h))
+        (p2 (gethash :param2 h)))
+    (cond
+      ((and (equal s '(*))
+            (<= (length p1) 3))
+       (setf (gethash :param1 h) (append (gethash :param1 h) `(,c))))
+      ((and (equal s '(#\,))
+            (<= (length p2) 3))
+       (setf (gethash :param2 h) (append (gethash :param2 h) `(,c))))
+      (t (clear-state h)))))
+
+(defun handle-comma (h c)
+  (let ((s (gethash :state h))
+        (p1 (gethash :param1 h)))
+    (if (and (equal s '(*))
+             (<= (length p1) 3))
+        (setf (gethash :state h) '(#\,))
+        (clear-state h))))
+
+(defun calc-prods (h)
+  (let ((p1 (gethash :param1 h))
+        (p2 (gethash :param2 h)))
+    (* (parse-number (coerce p1 'string))
+       (parse-number (coerce p2 'string)))))
+
+(defun handle-close (h c)
+  (let ((s (gethash :state h))
+        (p1 (gethash :param1 h))
+        (p2 (gethash :param2 h)))
+    (if (and (equal s '(#\,))
+             (<= (length p1) 3)
+             (<= (length p2) 3))
+        (prog2
+          (setf (gethash :prods h) (append (gethash :prods h) `(,(calc-prods h))))
+          (clear-state h))
+        (clear-state h))))
+
+  ;; if state = (list #\m #\u #\l #\() set to '(*)
+  ;; if state = '* and c is match-num and param1 <= 3 then add to param1
+  ;; if state = , and c is match-num and param2 <= 3 then add to param2
+  ;; if state = ) and param1 and param2 are at least 1 the add (* p1 p2) to prods
+  ;; else clear state and param1 param2
+
+(defun handle-char (h c)
+  (print (format nil "~a ~a" (gethash :state h) c))
+  (cond
+    ((match-mul c) (handle-mul h c))
+    ((equal c #\() (handle-mul h c))
+    ((match-num c) (handle-num h c))
+    ((equal c #\,) (handle-comma h c))
+    ((equal c #\)) (handle-close h c))
+    (t (clear-state h)))
+  h)
+
 (defun part1 (filename)
-  filename)
+  (let* ((cs (uiop:read-file-string filename))
+         (h (reduce
+             (lambda (acc c)
+               (handle-char acc c)
+               acc)
+             cs :initial-value
+             (dict :state '() :param1 '() :param2 '() :prods '()))))
+    (apply #'+ (gethash :prods h))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; part2

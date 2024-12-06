@@ -10,7 +10,9 @@
                "str"
                "parse-float"
                "parse-number"
+               "parseq"
                "cl-ppcre"
+               "trivia"
                "uiop")
   :components ((:module "src"
                 :components
