@@ -6,6 +6,7 @@
                "alexandria"
                "arrow-macros"
                "fset"
+               "iterate"
                "serapeum"
                "str"
                "parse-float"
@@ -19,8 +20,9 @@
                 ((:file "main")
                  (:file "2024/day1")
                  (:file "2024/day2")
-                 (:file "2024/day3"))))
-  :description "Advent of Code in Common Lisp (SBCL)"
+                 (:file "2024/day3")
+                 (:file "2024/day4"))
+                :description "Advent of Code in Common Lisp (SBCL)"))
   :in-order-to ((test-op (test-op "cl-aoc/tests"))))
 
 (defsystem "cl-aoc/tests"
