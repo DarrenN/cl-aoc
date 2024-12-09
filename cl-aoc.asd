@@ -21,7 +21,8 @@
                  (:file "2024/day1")
                  (:file "2024/day2")
                  (:file "2024/day3")
-                 (:file "2024/day4"))
+                 (:file "2024/day4")
+                 (:file "2024/day5"))
                 :description "Advent of Code in Common Lisp (SBCL)"))
   :in-order-to ((test-op (test-op "cl-aoc/tests"))))
 
