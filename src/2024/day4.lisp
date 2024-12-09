@@ -27,30 +27,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; part1
 
-(defun selfp (d y x)
-  (and (= (car d) y) (= (cadr d) x)))
-
-(defun get-char (y x dim matrix)
+(defun get-char (y x matrix)
   "Safely extract a char from matrix repsecting the bounds."
   (cond
     ((< y 0) '())
-    ((> y (1- (car dim))) '())
+    ((> y (1- (array-dimension matrix 0))) '())
     ((< x 0) '())
-    ((> x (1- (cadr dim))) '())
+    ((> x (1- (array-dimension matrix 1))) '())
     (t (aref matrix y x))))
 
-(defun get-neighbors (&key y x matrix dim)
+(defun get-neighbors (&key y x matrix)
   "For each X scan the neighboring 3 cells for MAS in every direction."
   (i:iter outer (i:for i below (array-dimension *dir* 0))
     (i:for dx = (aref *dir* i 0))
     (i:for dy = (aref *dir* i 1))
     (when (or
-           (and (eq (get-char (+ y dy) (+ x dx) dim matrix) #\M)
-                (eq (get-char (+ y (* 2 dy)) (+ x (* 2 dx)) dim matrix) #\A)
-                (eq (get-char (+ y (* 3 dy)) (+ x (* 3 dx)) dim matrix) #\S))
-           (and (eq (get-char (- y dy) (- x dx) dim matrix) #\M)
-                (eq (get-char (- y (* 2 dy)) (- x (* 2 dx)) dim matrix) #\A)
-                (eq (get-char (- y (* 3 dy)) (- x (* 3 dx)) dim matrix) #\S)))
+           (and (eq (get-char (+ y dy) (+ x dx) matrix) #\M)
+                (eq (get-char (+ y (* 2 dy)) (+ x (* 2 dx)) matrix) #\A)
+                (eq (get-char (+ y (* 3 dy)) (+ x (* 3 dx)) matrix) #\S))
+           (and (eq (get-char (- y dy) (- x dx) matrix) #\M)
+                (eq (get-char (- y (* 2 dy)) (- x (* 2 dx)) matrix) #\A)
+                (eq (get-char (- y (* 3 dy)) (- x (* 3 dx)) matrix) #\S)))
       (i:sum 1))))
 
 (defun part1 (filename)
@@ -73,7 +70,7 @@
       (i:iter (i:for j below (array-dimension matrix 1))
         (i:in outer
               (when (eq #\X (aref matrix i j))
-                (i:sum (get-neighbors :y i :x j :matrix matrix :dim dim))))))))
+                (i:sum (get-neighbors :y i :x j :matrix matrix))))))))
 
 
 
