@@ -52,8 +52,15 @@
          acc))
      lines :initial-value (dict :orders (dict) :updates '()))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; part1
+
 (defun correct-order (updates orders)
-  "Correct order:"
+  "Slide along updates and check to see if the next update number is a member
+of the previous updates children. When it is, add one to the count. When the
+final count equals the length of the updates then return the middle number from
+updates."
   (let* ((p (car updates))
          (hits
            (i:iter (i:for n in (cdr updates))
@@ -64,9 +71,6 @@
     (if (eq (length updates) (1+ hits))
         (car (nthcdr (floor (/ (length updates) 2)) updates))
         0)))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; part1
 
 (defun part1 (filename)
   (let* ((input (parse-input filename))
